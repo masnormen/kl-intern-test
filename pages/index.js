@@ -1,65 +1,78 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import {useEffect, useState} from "react";
+import Head from "next/head";
+import Dropdown from "../components/Dropdown";
+import Label from "../components/Label";
+import {choose, type, title} from "../components/Data";
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+const Home = () => {
+	const [value1, setValue1] = useState(null);
+	const [value2, setValue2] = useState(null);
+	const [value3, setValue3] = useState(null);
+	
+	useEffect(() => {
+		setValue3(null);
+	}, [value2]);
+	
+	useEffect(() => {
+		setValue2(null);
+	}, [value1]);
+	
+	return (
+		<>
+			<Head>
+				<title>KitaLulus Intern Test - Nourman Hajar</title>
+			</Head>
+			<div style={{maxWidth: "400px", margin: "70px auto"}}>
+				<h1>KitaLulus Intern Test</h1>
+				
+				<Label>CHOOSE</Label>
+				<Dropdown
+					value={value1}
+					onChange={setValue1}
+					options={choose}
+				/>
+				
+				{value1 !== null && (
+					<>
+						<Label>TYPE</Label>
+						<Dropdown
+							value={value2}
+							onChange={setValue2}
+							options={type.filter(x => x.parent === value1.id)}
+						/>
+					</>
+				)}
+				
+				{value2 !== null && (
+					<>
+						<Label>TITLE</Label>
+						<Dropdown
+							value={value3}
+							onChange={setValue3}
+							options={title.filter(x => x.parent === value2.id)}
+						/>
+					</>
+				)}
+				
+				<div style={{marginTop: "30px"}}>
+					{value1 !== null && <>
+						<Label>value1:</Label>
+						{JSON.stringify(value1)}
+					</>}
+					{value2 !== null && <>
+						<Label>value2:</Label>
+						{JSON.stringify(value2)}
+					</>}
+					{value3 !== null && <>
+						<Label>value3:</Label>
+						{JSON.stringify(value3)}
+					</>}
+				</div>
+			</div>
+			
+			<h4>&copy; 2020</h4>
+		</>
+	)
 }
+
+export default Home;
